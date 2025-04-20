@@ -16,7 +16,7 @@ class Sprite {
         this.framesMax = framesMax
         this.framesCurrent = 0
         this.framesElapsed = 0
-        this.framesHold = 25
+        this.framesHold = 11
         this.offset = offset
     }
 

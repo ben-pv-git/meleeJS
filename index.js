@@ -175,9 +175,26 @@ const keys = {
 
 decreaseTimer()
 
+// set time in ms from page load until now
+let msPrev = window.performance.now()
+
+const fps = 60
+const msPerFrame = 1000 / fps
+
 function animate() {
     // recursively call animation frames
     window.requestAnimationFrame(animate)
+
+    // get how many ms have passed since previous game loop
+    // if its less than ms per frame, dont update animations
+    const msNow = window.performance.now()
+    const msPassed = msNow - msPrev
+    if (msPassed < msPerFrame) return
+
+    // get left over time between game loop iterations
+    // subtract left over time from next loop using msPrev
+    const excessTime = msPassed % msPerFrame
+    msPrev = msNow - excessTime
 
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height)
@@ -194,10 +211,10 @@ function animate() {
 
     // player movement
     if (keys.a.pressed && player.lastKey === 'a') {
-        player.velocity.x = -1
+        player.velocity.x = -4
         player.switchSprite('run')
     } else if (keys.d.pressed && player.lastKey === 'd') {
-        player.velocity.x = 1
+        player.velocity.x = 4
         player.switchSprite('run')
     } else {
         player.switchSprite('idle')
@@ -212,10 +229,10 @@ function animate() {
 
     // enemy movement
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -1
+        enemy.velocity.x = -4
         enemy.switchSprite('run')
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.velocity.x = 1
+        enemy.velocity.x = 4
         enemy.switchSprite('run')
     } else {
         enemy.switchSprite('idle')
