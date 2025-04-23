@@ -4,11 +4,12 @@ class Sprite {
         imageSrc,
         scale = 1,
         framesMax = 1,
-        offset = { x: 0, y: 0 }
+        offset = { x: 0, y: 0 },
+        dimensions = { width: 0, height: 0 }
     }) {
         this.position = position
-        this.width = 50
-        this.height = 150
+        this.width = dimensions.width
+        this.height = dimensions.height
         this.image = new Image()
         this.image.src = imageSrc
         this.scale = scale
@@ -66,6 +67,7 @@ class Fighter extends Sprite {
         scale = 1,
         framesMax = 1,
         offset = { x: 0, y: 0 },
+        dimensions = { width: 0, height: 0 },
         sprites,
         hitBox  = { offset: {}, width: undefined, height: undefined }
     }) {
@@ -77,8 +79,8 @@ class Fighter extends Sprite {
             offset
         })
         this.velocity = velocity
-        this.width = 50
-        this.height = 150
+        this.width = dimensions.width
+        this.height = dimensions.height
         this.lastKey
         this.hitBox = {
             position: {
@@ -114,8 +116,9 @@ class Fighter extends Sprite {
         this.hitBox.position.x = this.position.x + this.hitBox.offset.x
         this.hitBox.position.y = this.position.y + this.hitBox.offset.y
 
-        // show hitboxes
-        // c.fillRect(this.hitBox.position.x, this.hitBox.position.y, this.hitBox.width, this.hitBox.height)
+        // show hurtbox
+        c.fillStyle = ('rgba(255, 0 , 0, 0.4)')
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         // update x and y coordinates based on velocity
         this.position.x += this.velocity.x
@@ -124,9 +127,9 @@ class Fighter extends Sprite {
         // gravity function
         // if hurtbox is at or past bottom of screen vertically, stop falling.
         // else, accelerate with gravity
-        if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
+        if (this.position.y + this.height + this.velocity.y >= canvas.height - 348) {
             this.velocity.y = 0
-            this.position.y = 330
+            this.position.y = 420
         } else this.velocity.y += gravity
     }
 

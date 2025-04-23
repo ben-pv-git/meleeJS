@@ -3,7 +3,7 @@ const c = canvas.getContext('2d')
 
 // set screen dimensions
 canvas.width = 1024
-canvas.height = 576
+canvas.height = 768
 
 // fill background
 c.fillRect(0, 0, canvas.width, canvas.height)
@@ -34,8 +34,8 @@ const shop = new Sprite({
 // declare player
 const player = new Fighter({
     position: {
-        x: 0,
-        y: 0
+        x: 150,
+        y: 420
     },
     velocity: {
         x: 0,
@@ -51,6 +51,10 @@ const player = new Fighter({
     offset: {
         x: 215,
         y: 157
+    },
+    dimensions: {
+        width: 68,
+        height: 150
     },
     sprites: {
         idle: {
@@ -95,14 +99,13 @@ const player = new Fighter({
 // declare enemy
 const enemy = new Fighter({
     position: {
-        x: canvas.width - 50,
-        y: 0
+        x: canvas.width - 200,
+        y: 420
     },
     velocity: {
         x: 0,
         y: 0
     },
-    color: 'green',
     offset: {
         x: -50,
         y: 0
@@ -113,6 +116,10 @@ const enemy = new Fighter({
     offset: {
         x: 215,
         y: 170
+    },
+    dimensions: {
+        width: 51,
+        height: 150
     },
     sprites: {
         idle: {
@@ -175,6 +182,11 @@ const keys = {
 
 decreaseTimer()
 
+/* 
+FRAMERATE CALCULATION REFERENCE: 
+https://chriscourses.com/blog/standardize-your-javascript-games-framerate-for-different-monitors
+*/
+
 // set time in ms from page load until now
 let msPrev = window.performance.now()
 
@@ -196,12 +208,12 @@ function animate() {
     const excessTime = msPassed % msPerFrame
     msPrev = msNow - excessTime
 
-    c.fillStyle = 'black'
+    c.fillStyle = 'rgb(5, 0, 80)'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    background.update()
-    shop.update()
-    c.fillStyle = 'rgba(255, 255, 255, 0.15)'
-    c.fillRect(0, 0, canvas.width, canvas.height)
+    // background.update()
+    // shop.update()
+    c.fillStyle = 'rgb(0, 0, 0)'
+    c.fillRect(0, 570, canvas.width, canvas.height)
     player.update()
     enemy.update()
 
