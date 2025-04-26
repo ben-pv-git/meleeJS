@@ -117,7 +117,7 @@ class Fighter extends Sprite {
         this.hitBox.position.y = this.position.y + this.hitBox.offset.y
 
         // show hurtbox
-        c.fillStyle = ('rgba(255, 0 , 0, 0.4)')
+        c.fillStyle = ('rgba(0, 0 , 255, 0.4)')
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         // update x and y coordinates based on velocity
@@ -127,7 +127,7 @@ class Fighter extends Sprite {
         // gravity function
         // if hurtbox is at or past bottom of screen vertically, stop falling.
         // else, accelerate with gravity
-        if (this.position.y + this.height + this.velocity.y >= canvas.height - 348) {
+        if (this.position.y + this.height + this.velocity.y >= canvas.height - 198) {
             this.velocity.y = 0
             this.position.y = 420
         } else this.velocity.y += gravity

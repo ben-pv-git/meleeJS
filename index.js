@@ -9,7 +9,7 @@ canvas.height = 768
 c.fillRect(0, 0, canvas.width, canvas.height)
 
 // gravity multiplier
-const gravity = 0.2
+const gravity = 0.6
 
 // declare background sprite
 const background = new Sprite({
@@ -34,7 +34,7 @@ const shop = new Sprite({
 // declare player
 const player = new Fighter({
     position: {
-        x: 150,
+        x: 149,
         y: 420
     },
     velocity: {
@@ -190,9 +190,12 @@ https://chriscourses.com/blog/standardize-your-javascript-games-framerate-for-di
 // set time in ms from page load until now
 let msPrev = window.performance.now()
 
+// constants for framerate
 const fps = 60
 const msPerFrame = 1000 / fps
 
+// start frame counter at 0
+let frames = 0
 function animate() {
     // recursively call animation frames
     window.requestAnimationFrame(animate)
@@ -208,12 +211,17 @@ function animate() {
     const excessTime = msPassed % msPerFrame
     msPrev = msNow - excessTime
 
+    // add to frame counter
+    frames++
+
+    console.log(player.velocity.y)
+    // color background and floor
     c.fillStyle = 'rgb(5, 0, 80)'
     c.fillRect(0, 0, canvas.width, canvas.height)
-    // background.update()
-    // shop.update()
     c.fillStyle = 'rgb(0, 0, 0)'
     c.fillRect(0, 570, canvas.width, canvas.height)
+
+    // update characters
     player.update()
     enemy.update()
 
@@ -223,10 +231,10 @@ function animate() {
 
     // player movement
     if (keys.a.pressed && player.lastKey === 'a') {
-        player.velocity.x = -4
+        player.velocity.x = -3
         player.switchSprite('run')
     } else if (keys.d.pressed && player.lastKey === 'd') {
-        player.velocity.x = 4
+        player.velocity.x = 3
         player.switchSprite('run')
     } else {
         player.switchSprite('idle')
@@ -241,10 +249,10 @@ function animate() {
 
     // enemy movement
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -4
+        enemy.velocity.x = -3
         enemy.switchSprite('run')
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.velocity.x = 4
+        enemy.velocity.x = 3
         enemy.switchSprite('run')
     } else {
         enemy.switchSprite('idle')
@@ -305,6 +313,11 @@ function animate() {
     }
 }
 
+// log frame counter
+setInterval(() => {
+    console.log(frames)
+  }, 1000)
+
 animate()
 
 window.addEventListener('keydown', (event) => {
@@ -320,7 +333,7 @@ window.addEventListener('keydown', (event) => {
                 player.lastKey = 'd'
                 break
             case 'w':
-                player.velocity.y = -10
+                player.velocity.y = -17
                 break
             case ' ':
                 player.attack()
@@ -340,7 +353,7 @@ window.addEventListener('keydown', (event) => {
                 enemy.lastKey = 'ArrowRight'
                 break
             case 'ArrowUp':
-                enemy.velocity.y = -10
+                enemy.velocity.y = -17
                 break
             case 'ArrowDown':
                 enemy.attack()

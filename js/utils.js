@@ -7,6 +7,8 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
     )
 }
 
+
+
 function determineWinner({ player, enemy, timerId }) {
     clearTimeout(timerId)
     document.querySelector('#displayText').style.display = 'flex'
@@ -19,6 +21,9 @@ function determineWinner({ player, enemy, timerId }) {
     }
 }
 
+
+
+// in game timer
 let timer = 60
 let timerId
 function decreaseTimer() {
