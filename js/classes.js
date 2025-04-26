@@ -2,7 +2,7 @@ class Sprite {
     constructor({
         position,
         imageSrc,
-        scale = 1,
+        scale,
         framesMax = 1,
         offset = { x: 0, y: 0 },
         dimensions = { width: 0, height: 0 }
@@ -41,6 +41,11 @@ class Sprite {
     }
 
     animateFrames() {
+        // this is jank, basically just makes animations run
+        // as fast as "expected"
+        this.framesElapsed++
+        this.framesElapsed++
+        this.framesElapsed++
         this.framesElapsed++
 
         if (this.framesElapsed % this.framesHold === 0) {
@@ -60,6 +65,7 @@ class Sprite {
 
 class Fighter extends Sprite {
     constructor({
+        character,
         position,
         velocity,
         color = 'blue',
@@ -67,7 +73,6 @@ class Fighter extends Sprite {
         scale = 1,
         framesMax = 1,
         offset = { x: 0, y: 0 },
-        dimensions = { width: 0, height: 0 },
         sprites,
         hitBox  = { offset: {}, width: undefined, height: undefined }
     }) {
@@ -78,9 +83,10 @@ class Fighter extends Sprite {
             framesMax,
             offset
         })
+        this.character = character
         this.velocity = velocity
-        this.width = dimensions.width
-        this.height = dimensions.height
+        this.width = character.width
+        this.height = character.height
         this.lastKey
         this.hitBox = {
             position: {
@@ -129,7 +135,8 @@ class Fighter extends Sprite {
         // else, accelerate with gravity
         if (this.position.y + this.height + this.velocity.y >= canvas.height - 198) {
             this.velocity.y = 0
-            this.position.y = 420
+            // 270 is "height of the stage" from the bottom of the screen
+            this.position.y = canvas.height - 198 - this.height
         } else this.velocity.y += gravity
     }
 

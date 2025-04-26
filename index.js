@@ -9,39 +9,16 @@ canvas.height = 768
 c.fillRect(0, 0, canvas.width, canvas.height)
 
 // gravity multiplier
-const gravity = 0.6
-
-// declare background sprite
-const background = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    imageSrc: './img/background.png'
-})
-
-// declare shop sprite
-const shop = new Sprite({
-    position: {
-        x: 600,
-        y: 128
-    },
-    imageSrc: './img/shop.png',
-    scale: 2.75,
-    framesMax: 6
-})
+let gravity = 1
 
 // declare player
 const player = new Fighter({
+    character: new Falco(),
     position: {
         x: 149,
-        y: 420
+        y: 460
     },
     velocity: {
-        x: 0,
-        y: 0
-    },
-    offset: {
         x: 0,
         y: 0
     },
@@ -50,11 +27,7 @@ const player = new Fighter({
     scale: 2.5,
     offset: {
         x: 215,
-        y: 157
-    },
-    dimensions: {
-        width: 68,
-        height: 150
+        y: 175
     },
     sprites: {
         idle: {
@@ -98,6 +71,7 @@ const player = new Fighter({
 
 // declare enemy
 const enemy = new Fighter({
+    character: new Fox(),
     position: {
         x: canvas.width - 200,
         y: 420
@@ -106,20 +80,12 @@ const enemy = new Fighter({
         x: 0,
         y: 0
     },
-    offset: {
-        x: -50,
-        y: 0
-    },
     imageSrc: './img/kenji/Idle.png',
     framesMax: 4,
     scale: 2.5,
     offset: {
         x: 215,
         y: 170
-    },
-    dimensions: {
-        width: 51,
-        height: 150
     },
     sprites: {
         idle: {
@@ -170,6 +136,9 @@ const keys = {
     d: {
         pressed: false
     },
+    s: {
+        pressed: false
+    },
 
     // enemy keys
     ArrowLeft: {
@@ -195,7 +164,7 @@ const fps = 60
 const msPerFrame = 1000 / fps
 
 // start frame counter at 0
-let frames = 0
+// let frames = 0
 function animate() {
     // recursively call animation frames
     window.requestAnimationFrame(animate)
@@ -212,9 +181,8 @@ function animate() {
     msPrev = msNow - excessTime
 
     // add to frame counter
-    frames++
+    // frames++
 
-    console.log(player.velocity.y)
     // color background and floor
     c.fillStyle = 'rgb(5, 0, 80)'
     c.fillRect(0, 0, canvas.width, canvas.height)
@@ -231,10 +199,10 @@ function animate() {
 
     // player movement
     if (keys.a.pressed && player.lastKey === 'a') {
-        player.velocity.x = -3
+        player.velocity.x = -player.character.runSpeed
         player.switchSprite('run')
     } else if (keys.d.pressed && player.lastKey === 'd') {
-        player.velocity.x = 3
+        player.velocity.x = player.character.runSpeed
         player.switchSprite('run')
     } else {
         player.switchSprite('idle')
@@ -245,14 +213,17 @@ function animate() {
         player.switchSprite('jump')
     } else if (player.velocity.y > 0) {
         player.switchSprite('fall')
+        if (keys.s.pressed && player.lastKey === 's') {
+            gravity = 1.2
+        }
     }
 
     // enemy movement
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -3
+        enemy.velocity.x = -enemy.character.runSpeed
         enemy.switchSprite('run')
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-        enemy.velocity.x = 3
+        enemy.velocity.x = enemy.character.runSpeed
         enemy.switchSprite('run')
     } else {
         enemy.switchSprite('idle')
@@ -314,9 +285,9 @@ function animate() {
 }
 
 // log frame counter
-setInterval(() => {
-    console.log(frames)
-  }, 1000)
+// setInterval(() => {
+//     console.log(frames)
+//   }, 1000)
 
 animate()
 
@@ -334,6 +305,10 @@ window.addEventListener('keydown', (event) => {
                 break
             case 'w':
                 player.velocity.y = -17
+                break
+            case 's':
+                keys.s.pressed = true
+                player.lastKey = 's'
                 break
             case ' ':
                 player.attack()
@@ -361,6 +336,7 @@ window.addEventListener('keydown', (event) => {
         }
     }
 })
+
 window.addEventListener('keyup', (event) => {
     switch (event.key) {
         // player keys
